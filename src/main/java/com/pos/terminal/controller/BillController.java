@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/bills")
@@ -31,5 +33,19 @@ public class BillController {
     @GetMapping("/user/{userId}")
     public List<Bill> getBillsByUser(@PathVariable Long userId) {
         return billRepository.findByUserIdOrderByCreatedAtDesc(userId);
+    }
+    @GetMapping("/stats/{userId}")
+    public Map<String, Object> getDashboardStats(@PathVariable Long userId) {
+        List<Bill> userBills = billRepository.findByUserIdOrderByCreatedAtDesc(userId);
+
+        double totalRevenue = userBills.stream()
+                .mapToDouble(Bill::getTotalAmount)
+                .sum();
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalRevenue", totalRevenue);
+        stats.put("totalOrders", (long) userBills.size());
+
+        return stats;
     }
 }
