@@ -1,11 +1,10 @@
 package com.pos.terminal.repository;
 
-import com.pos.terminal.model.Bill; // Import your Bill model
-import org.springframework.data.jpa.repository.JpaRepository; // Import the JPA tool
-import org.springframework.stereotype.Repository;
+import com.pos.terminal.model.Bill;
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-@Repository
 public interface BillRepository extends JpaRepository<Bill, Long> {
-    // JpaRepository already provides save(), findAll(), findById()
-    // You don't need to write any code here for basic functionality!
+    // Fetches all bills for a user, newest first
+    List<Bill> findByUserIdOrderByCreatedAtDesc(Long userId);
 }

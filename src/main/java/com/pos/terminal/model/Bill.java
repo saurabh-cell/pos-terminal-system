@@ -19,4 +19,10 @@ public class Bill {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "bill_id")
     private List<BillItem> items;
+
+    // ─── ADD THIS SECTION ───
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    // ────────────────────────
 }
